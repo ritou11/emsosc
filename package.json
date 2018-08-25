@@ -1,0 +1,14 @@
+{
+  "name": "emsOscilloscope",
+  "version": "1.0.0",
+  "description": "A lite oscilloscope for debugging in EMS lab",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Nogeek",
+  "license": "MIT",
+  "dependencies": {
+    "electron": "^2.0.8"
+  }
+}
