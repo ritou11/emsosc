@@ -9,6 +9,14 @@
   "author": "Nogeek",
   "license": "MIT",
   "dependencies": {
-    "electron": "^2.0.8"
+    "axios": "^0.18.0",
+    "electron": "^2.0.8",
+    "highcharts": "^6.1.1",
+    "net": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }

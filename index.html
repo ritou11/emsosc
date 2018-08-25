@@ -10,10 +10,11 @@
     We are using Node.js <script>document.write(process.versions.node)</script>,
     Chromium <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
-
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <button id="listenBtn">Listen</button>
+    <textarea id="textArea"></textarea>
     <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
+      require('./renderer.js');
     </script>
   </body>
 </html>
