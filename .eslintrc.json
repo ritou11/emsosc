@@ -1,5 +1,8 @@
 {
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base", "plugin:react/recommended"],
+  "plugins": [
+    "react"
+  ],
   "env": {
     "node": true,
     "jest": true,
@@ -7,7 +10,10 @@
   },
   "parserOptions": {
     "ecmaVersion": 2017,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "arrow-parens": [
