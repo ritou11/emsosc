@@ -1,14 +1,30 @@
 {
-  "name": "emsOscilloscope",
-  "version": "1.0.0",
+  "name": "emsosc",
+  "version": "0.0.1",
   "description": "A lite oscilloscope for debugging in EMS lab",
-  "main": "main.js",
+  "main": "public/main.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "start-electron": "electron ."
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-start": "electron .",
+    "electron-pack": "yarn build > /dev/null && build -c.extraMetadata.main=build/main.js"
+  },
+  "homepage": "./",
+  "build": {
+    "appId": "com.nogeek.emsosc",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "mac": {
+      "target": "dir"
+    }
   },
   "author": "Nogeek",
   "license": "MIT",
