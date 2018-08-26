@@ -24,7 +24,7 @@
       "error",
       "as-needed"
     ],
-    "class-methods-use-this": "error",
+    "class-methods-use-this": "off",
     "comma-dangle": [
       "error",
       {

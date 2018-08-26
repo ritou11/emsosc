@@ -29,10 +29,11 @@
   "author": "Nogeek",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^1.5.1",
     "axios": "^0.18.0",
     "electron-is-dev": "^0.3.0",
     "highcharts": "^6.1.1",
-    "material-ui": "^0.20.2",
+    "highcharts-react-official": "^1.4.0",
     "net": "^1.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
