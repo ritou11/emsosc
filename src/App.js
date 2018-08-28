@@ -2,15 +2,19 @@ import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import logo from './logo.svg';
 import './App.css';
 
 const { dialog } = window.require('electron').remote;
+const { ipcRenderer } = window.require('electron');
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      portText: '8888',
+      listenState: 'IDLE',
       chart: Highcharts,
       options: {
         chart: {
@@ -46,6 +50,12 @@ class App extends Component {
         }],
       },
     };
+    ipcRenderer.on('toggle-listening', (event, listenState) => {
+      if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
+    });
+    ipcRenderer.on('data', (event, data) => {
+      console.log(data);
+    });
   }
 
   render() {
@@ -68,7 +78,7 @@ class App extends Component {
           variant="contained"
           color="primary"
           onClick={this._handleLogin.bind(this)}>
-          Hello World
+          Msg
         </Button>
         <Button
           variant="contained"
@@ -76,6 +86,18 @@ class App extends Component {
           onClick={this._addPoint.bind(this)}>
           Add
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this._toggleListen.bind(this)}>
+          TOGGLE
+        </Button>
+        <TextField
+          id="name"
+          label="Name"
+          value={this.state.listenState}
+          margin="normal"
+        />
       </div>
     );
   }
@@ -98,6 +120,13 @@ class App extends Component {
 
   _addPoint() {
     this.setState((prevState) => prevState.options.series[0].data.push([Math.random(), Math.random()]));
+  }
+
+  _toggleListen() {
+    if (this.state.listenState !== 'ACTING') {
+      ipcRenderer.send('toggle-listening', parseInt(this.state.portText, 10) || 8888);
+      this.setState({ listenState: 'ACTING' });
+    }
   }
 }
 
