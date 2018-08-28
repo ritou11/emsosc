@@ -54,6 +54,8 @@ class App extends Component {
       if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
     });
     ipcRenderer.on('data', (event, data) => {
+      const m = data.match(/[+-]?\d+(\.\d+)?/);
+      if (m && m.length > 1 && parseFloat(m[0]) && parseFloat(m[1])) this.addPoint(parseFloat(m[0]), parseFloat(m[1]));
       console.log(data);
     });
   }
@@ -102,6 +104,10 @@ class App extends Component {
     );
   }
 
+  addPoint(x, y) {
+    this.setState((prevState) => prevState.options.series[0].data.push([x, y]));
+  }
+
   _handleLogin() {
     const options = {
       type: 'info',
@@ -111,11 +117,7 @@ class App extends Component {
       defaultId: 0,
       cancelId: 0,
     };
-    dialog.showMessageBox(options, (res) => {
-      if (res === 0) {
-        console.log('OK pressed!');
-      }
-    });
+    dialog.showMessageBox(options);
   }
 
   _addPoint() {

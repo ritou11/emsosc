@@ -41,9 +41,6 @@ ipcMain.on('toggle-listening', async (event, listenPort) => {
       socket.on('data', (data) => {
         event.sender.send('data', data);
       });
-      socket.on('close', () => {
-        console.log('Closed');
-      });
       clients.push(socket);
     });
     server.listen(listenPort);
