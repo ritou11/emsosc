@@ -34,6 +34,7 @@
     "electron-is-dev": "^0.3.0",
     "highcharts": "^6.1.1",
     "highcharts-react-official": "^1.4.0",
+    "lodash": "^4.17.10",
     "net": "^1.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",

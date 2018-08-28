@@ -3,8 +3,9 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import logo from './logo.svg';
 import './App.css';
+
+const _ = require('lodash');
 
 const { dialog } = window.require('electron').remote;
 const { ipcRenderer } = window.require('electron');
@@ -19,28 +20,30 @@ class App extends Component {
       options: {
         chart: {
           zoomType: 'xy',
+          width: 800,
+          height: 550,
         },
         title: {
           text: 'Network sent data',
         },
         xAxis: {
           type: 'time',
+          min: 0,
+          max: 1,
+        },
+        yAxis: {
+          min: 0,
+          max: 1,
         },
         legend: {
           enabled: false,
         },
         plotOptions: {
-          area: {
+          scatter: {
             marker: {
-              radius: 2,
+              radius: 1,
+              fillColor: '#FF0000',
             },
-            lineWidth: 1,
-            states: {
-              hover: {
-                lineWidth: 1,
-              },
-            },
-            threshold: null,
           },
         },
         series: [{
@@ -54,9 +57,12 @@ class App extends Component {
       if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
     });
     ipcRenderer.on('data', (event, data) => {
-      const m = data.match(/[+-]?\d+(\.\d+)?/);
-      if (m && m.length > 1 && parseFloat(m[0]) && parseFloat(m[1])) this.addPoint(parseFloat(m[0]), parseFloat(m[1]));
-      console.log(data);
+      const m = data.split(' ');
+      // console.log(m);
+      if (m && m.length > 1
+        && _.isNumber(parseFloat(m[0]))
+        && _.isNumber(parseFloat(m[1]))) this.addPoint(parseFloat(m[0]), parseFloat(m[1]));
+      // console.log(data);
     });
   }
 
@@ -64,12 +70,8 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">A lite oscilloscope for debugging in EMS lab</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
         <div>
           <HighchartsReact
             highcharts={this.state.chart}
@@ -95,8 +97,8 @@ class App extends Component {
           TOGGLE
         </Button>
         <TextField
-          id="name"
-          label="Name"
+          id="state"
+          label="State"
           value={this.state.listenState}
           margin="normal"
         />
