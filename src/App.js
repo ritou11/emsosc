@@ -8,6 +8,46 @@ import './App.css';
 const { dialog } = window.require('electron').remote;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chart: Highcharts,
+      options: {
+        chart: {
+          zoomType: 'xy',
+        },
+        title: {
+          text: 'Network sent data',
+        },
+        xAxis: {
+          type: 'time',
+        },
+        legend: {
+          enabled: false,
+        },
+        plotOptions: {
+          area: {
+            marker: {
+              radius: 2,
+            },
+            lineWidth: 1,
+            states: {
+              hover: {
+                lineWidth: 1,
+              },
+            },
+            threshold: null,
+          },
+        },
+        series: [{
+          id: 'only',
+          type: 'scatter',
+          data: [],
+        }],
+      },
+    };
+  }
+
   render() {
     return (
       <div className="App">
@@ -20,40 +60,8 @@ class App extends Component {
         </p>
         <div>
           <HighchartsReact
-            highcharts={Highcharts}
-            options={{
-              chart: {
-                zoomType: 'xy',
-              },
-              title: {
-                text: 'Network sent data',
-              },
-              xAxis: {
-                type: 'time',
-              },
-              legend: {
-                enabled: false,
-              },
-              plotOptions: {
-                area: {
-                  marker: {
-                    radius: 2,
-                  },
-                  lineWidth: 1,
-                  states: {
-                    hover: {
-                      lineWidth: 1,
-                    },
-                  },
-                  threshold: null,
-                },
-              },
-              series: [{
-                id: 'only',
-                type: 'line',
-                data: [{ x: 1.5, y: 2 }, { x: 2, y: 3 }],
-              }],
-            }}
+            highcharts={this.state.chart}
+            options={this.state.options}
           />
         </div>
         <Button
@@ -61,6 +69,12 @@ class App extends Component {
           color="primary"
           onClick={this._handleLogin.bind(this)}>
           Hello World
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this._addPoint.bind(this)}>
+          Add
         </Button>
       </div>
     );
@@ -75,12 +89,15 @@ class App extends Component {
       defaultId: 0,
       cancelId: 0,
     };
-
     dialog.showMessageBox(options, (res) => {
       if (res === 0) {
         console.log('OK pressed!');
       }
     });
+  }
+
+  _addPoint() {
+    this.setState((prevState) => prevState.options.series[0].data.push([Math.random(), Math.random()]));
   }
 }
 

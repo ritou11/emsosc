@@ -4,6 +4,7 @@
     "react"
   ],
   "env": {
+    "browser": true,
     "node": true,
     "jest": true,
     "es6": true
@@ -92,6 +93,7 @@
       }
     ],
     "prefer-template": "error",
-    "require-yield": "warn"
+    "require-yield": "warn",
+    "react/prop-types": "off"
   }
 }
