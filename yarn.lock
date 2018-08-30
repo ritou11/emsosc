@@ -6388,6 +6388,10 @@ react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
+react-highlight-updates@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-highlight-updates/-/react-highlight-updates-1.0.0.tgz#2fc060cb24ead85262f001d074a6339af44a6058"
+
 react-jss@^8.1.0:
   version "8.6.1"
   resolved "https://registry.yarnpkg.com/react-jss/-/react-jss-8.6.1.tgz#a06e2e1d2c4d91b4d11befda865e6c07fbd75252"
