@@ -16,42 +16,8 @@ class App extends Component {
     this.state = {
       portText: '8888',
       listenState: 'IDLE',
-      chart: Highcharts,
-      options: {
-        chart: {
-          zoomType: 'xy',
-          width: 800,
-          height: 550,
-        },
-        title: {
-          text: 'Network sent data',
-        },
-        xAxis: {
-          type: 'time',
-          min: 0,
-          max: 1,
-        },
-        yAxis: {
-          min: 0,
-          max: 1,
-        },
-        legend: {
-          enabled: false,
-        },
-        plotOptions: {
-          scatter: {
-            marker: {
-              radius: 1,
-              fillColor: '#FF0000',
-            },
-          },
-        },
-        series: [{
-          id: 'only',
-          type: 'scatter',
-          data: [],
-        }],
-      },
+      data: [],
+      dataBuffer: [],
     };
     ipcRenderer.on('toggle-listening', (event, listenState) => {
       if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
@@ -74,40 +40,102 @@ class App extends Component {
         </header>
         <div>
           <HighchartsReact
-            highcharts={this.state.chart}
-            options={this.state.options}
+            highcharts={Highcharts}
+            options={{
+              chart: {
+                zoomType: 'xy',
+                height: 550,
+              },
+              title: {
+                text: 'Network sent data',
+              },
+              xAxis: {
+                type: 'time',
+                min: 0,
+                max: 1,
+              },
+              yAxis: {
+                min: 0,
+                max: 1,
+              },
+              legend: {
+                enabled: false,
+              },
+              plotOptions: {
+                scatter: {
+                  marker: {
+                    radius: 1,
+                    fillColor: '#FF0000',
+                  },
+                },
+              },
+              series: [{
+                id: 'only',
+                type: 'scatter',
+                data: this.state.data,
+              }],
+              tooltip: {
+                enabled: false,
+              },
+            }}
           />
         </div>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this._handleLogin.bind(this)}>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this._handleLogin.bind(this)}>
           Msg
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={this._addPoint.bind(this)}>
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this._addPoint.bind(this)}>
           Add
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={this._toggleListen.bind(this)}>
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this._toggleListen.bind(this)}>
           TOGGLE
-        </Button>
-        <TextField
-          id="state"
-          label="State"
-          value={this.state.listenState}
-          margin="normal"
-        />
+          </Button>
+          <TextField
+            id="state"
+            label="State"
+            value={this.state.listenState}
+            margin="normal"
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={this._refresh.bind(this)}>
+          Refresh
+          </Button>
+          <TextField
+            id="length"
+            label="DataLength"
+            value={this.state.data.length + this.state.dataBuffer.length}
+            margin="normal"
+          />
+        </div>
+
       </div>
     );
   }
 
   addPoint(x, y) {
-    this.setState((prevState) => prevState.options.series[0].data.push([x, y]));
+    this.setState((prevState) => ({
+      dataBuffer: [...prevState.dataBuffer, [x, y]],
+    }));
+  }
+
+  _refresh() {
+    if (this.state.dataBuffer.length > 0) {
+      this.setState((prevState) => ({
+        data: [...prevState.data, ...prevState.dataBuffer],
+        dataBuffer: [],
+      }));
+    }
   }
 
   _handleLogin() {
@@ -123,7 +151,9 @@ class App extends Component {
   }
 
   _addPoint() {
-    this.setState((prevState) => prevState.options.series[0].data.push([Math.random(), Math.random()]));
+    this.setState((prevState) => ({
+      data: [...prevState.data, [Math.random(), Math.random()]],
+    }));
   }
 
   _toggleListen() {
