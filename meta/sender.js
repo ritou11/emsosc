@@ -10,5 +10,5 @@ const client = net.connect(8888, 'localhost', () => {
     cnt += 1;
     const p = Math.random();
     client.write(`${p} ${Math.random() * Math.sqrt(1 - p * p)}`);
-  }, 100);
+  }, 10);
 });

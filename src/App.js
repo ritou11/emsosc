@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+
+import HighchartsReact from './HC.jsx';
 import './App.css';
 
 const _ = require('lodash');
 
 const { dialog } = window.require('electron').remote;
 const { ipcRenderer } = window.require('electron');
+let timer;
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class App extends Component {
       listenState: 'IDLE',
       data: [],
       dataBuffer: [],
+      updateChart: false,
     };
     ipcRenderer.on('toggle-listening', (event, listenState) => {
       if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
@@ -78,6 +81,7 @@ class App extends Component {
                 enabled: false,
               },
             }}
+            update={this.state.updateChart}
           />
         </div>
         <div>
@@ -126,6 +130,7 @@ class App extends Component {
   addPoint(x, y) {
     this.setState((prevState) => ({
       dataBuffer: [...prevState.dataBuffer, [x, y]],
+      updateChart: false,
     }));
   }
 
@@ -134,6 +139,7 @@ class App extends Component {
       this.setState((prevState) => ({
         data: [...prevState.data, ...prevState.dataBuffer],
         dataBuffer: [],
+        updateChart: true,
       }));
     }
   }
@@ -151,13 +157,22 @@ class App extends Component {
   }
 
   _addPoint() {
-    this.setState((prevState) => ({
+    this.addPoint(Math.random(), Math.random());
+    /* this.setState((prevState) => ({
       data: [...prevState.data, [Math.random(), Math.random()]],
-    }));
+    })); */
   }
 
   _toggleListen() {
     if (this.state.listenState !== 'ACTING') {
+      if (this.state.listenState === 'IDLE') {
+        timer = setInterval(() => {
+          const p = Math.random();
+          this.addPoint(p, Math.sqrt(1 - p * p) * Math.random());
+        }, 10);
+      } else {
+        clearInterval(timer);
+      }
       ipcRenderer.send('toggle-listening', parseInt(this.state.portText, 10) || 8888);
       this.setState({ listenState: 'ACTING' });
     }
