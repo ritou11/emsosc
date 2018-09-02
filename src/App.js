@@ -4,11 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import Chart from './Chart.jsx';
 import './App.css';
 
-const _ = require('lodash');
-
 const { dialog } = window.require('electron').remote;
 const { ipcRenderer } = window.require('electron');
-let timer;
 
 class App extends Component {
   constructor(props) {
@@ -23,13 +20,11 @@ class App extends Component {
     ipcRenderer.on('toggle-listening', (event, listenState) => {
       if (listenState === 'IDLE' || listenState === 'LISTENING') this.setState({ listenState });
     });
-    ipcRenderer.on('data', (event, data) => {
-      const m = data.split(' ');
-      // console.log(m);
-      if (m && m.length > 1
-        && _.isNumber(parseFloat(m[0]))
-        && _.isNumber(parseFloat(m[1]))) this.addPoint(parseFloat(m[0]), parseFloat(m[1]));
-      // console.log(data);
+    ipcRenderer.on('data', (event, dataBuffer) => {
+      dataBuffer.forEach((data) => {
+        const { x, y } = data;
+        this.addPoint(x, y);
+      });
     });
   }
 
@@ -126,12 +121,16 @@ class App extends Component {
   _toggleListen() {
     if (this.state.listenState !== 'ACTING') {
       if (this.state.listenState === 'IDLE') {
+        /*
         timer = setInterval(() => {
           const p = Math.random();
           this.addPoint(p, Math.sqrt(1 - p * p) * Math.random());
         }, 10);
+        */
       } else {
+        /*
         clearInterval(timer);
+        */
       }
       ipcRenderer.send('toggle-listening', parseInt(this.state.portText, 10) || 8888);
       this.setState({ listenState: 'ACTING' });
