@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import Highcharts from 'highcharts';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-
-import HighchartsReact from './HC.jsx';
+import Chart from './Chart.jsx';
 import './App.css';
 
 const _ = require('lodash');
@@ -42,47 +40,9 @@ class App extends Component {
           <h1 className="App-title">A lite oscilloscope for debugging in EMS lab</h1>
         </header>
         <div>
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={{
-              chart: {
-                zoomType: 'xy',
-                height: 550,
-              },
-              title: {
-                text: 'Network sent data',
-              },
-              xAxis: {
-                type: 'time',
-                min: 0,
-                max: 1,
-              },
-              yAxis: {
-                min: 0,
-                max: 1,
-              },
-              legend: {
-                enabled: false,
-              },
-              plotOptions: {
-                scatter: {
-                  marker: {
-                    radius: 1,
-                    fillColor: '#FF0000',
-                  },
-                },
-              },
-              series: [{
-                id: 'only',
-                type: 'scatter',
-                data: this.state.data,
-              }],
-              tooltip: {
-                enabled: false,
-              },
-            }}
-            update={this.state.updateChart}
-          />
+          <Chart
+            data={this.state.data}
+            update={this.state.updateChart} />
         </div>
         <div>
           <Button
@@ -129,7 +89,7 @@ class App extends Component {
 
   addPoint(x, y) {
     this.setState((prevState) => ({
-      dataBuffer: [...prevState.dataBuffer, [x, y]],
+      dataBuffer: [...prevState.dataBuffer, { x, y }],
       updateChart: false,
     }));
   }
