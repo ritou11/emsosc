@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Chart from './Chart.jsx';
 import './App.css';
 
-const { dialog } = window.require('electron').remote;
 const { ipcRenderer } = window.require('electron');
 
 class App extends Component {
@@ -42,12 +41,6 @@ class App extends Component {
         <div>
           <Button
             variant="contained"
-            color="primary"
-            onClick={this._handleLogin.bind(this)}>
-          Msg
-          </Button>
-          <Button
-            variant="contained"
             color="secondary"
             onClick={this._addPoint.bind(this)}>
           Add
@@ -67,6 +60,14 @@ class App extends Component {
           <Button
             variant="contained"
             color="secondary"
+            onClick={this._clearData.bind(this)}>
+              Clear
+          </Button>
+        </div>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={this._refresh.bind(this)}>
           Refresh
           </Button>
@@ -99,23 +100,19 @@ class App extends Component {
     }
   }
 
-  _handleLogin() {
-    const options = {
-      type: 'info',
-      buttons: ['确定'],
-      title: '登录',
-      message: 'haha',
-      defaultId: 0,
-      cancelId: 0,
-    };
-    dialog.showMessageBox(options);
+  _clearData() {
+    this.setState({
+      data: [],
+      dataBuffer: [],
+      updateChart: true,
+    });
   }
 
   _addPoint() {
-    this.addPoint(Math.random(), Math.random());
-    /* this.setState((prevState) => ({
-      data: [...prevState.data, [Math.random(), Math.random()]],
-    })); */
+    this.setState((prevState) => ({
+      data: [...prevState.data, { x: Math.random(), y: Math.random() }],
+      updateChart: true,
+    }));
   }
 
   _toggleListen() {

@@ -6,7 +6,7 @@ const _ = require('lodash');
 
 let mainWindow;
 const createWindow = () => {
-  mainWindow = new BrowserWindow({ width: 800, height: 800 });
+  mainWindow = new BrowserWindow({ width: 600, height: 1000 });
   mainWindow.loadURL(isDev ? 'http://localhost:3000/' : `file://${path.join(__dirname, '../build/index.html')}`);
   mainWindow.on('closed', () => { mainWindow = null; });
 };
