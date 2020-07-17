@@ -32,7 +32,7 @@
     "@material-ui/core": "^1.5.1",
     "axios": "^0.18.1",
     "electron-is-dev": "^0.3.0",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.19",
     "net": "^1.0.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
