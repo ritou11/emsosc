@@ -30,7 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^1.5.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "electron-is-dev": "^0.3.0",
     "lodash": "^4.17.13",
     "net": "^1.0.2",
